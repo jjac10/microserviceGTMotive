@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using GtMotive.Estimate.Microservice.Domain.Exceptions;
 
 namespace GtMotive.Estimate.Microservice.Domain.Entities
 {
@@ -20,12 +21,12 @@ namespace GtMotive.Estimate.Microservice.Domain.Entities
         {
             if (manufacturingDate < DateTime.UtcNow.AddYears(-5))
             {
-                throw new DomainException("The vehicle is over 5 years old and cannot be registered.");
+                throw new VehicleTooOldException();
             }
 
             if (string.IsNullOrWhiteSpace(licensePlate) || !LicensePlateRegex().IsMatch(licensePlate))
             {
-                throw new DomainException("The license plate format is invalid. Expected format: 1234ABC");
+                throw new InvalidLicensePlateException(licensePlate);
             }
 
             Id = id;
@@ -44,34 +45,50 @@ namespace GtMotive.Estimate.Microservice.Domain.Entities
         }
 
         /// <summary>
-        /// Gets or sets the unique identifier for the entity.
+        /// Gets the unique identifier for the entity.
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
 
         /// <summary>
-        /// Gets or sets the brand name associated with the item.
+        /// Gets the brand name associated with the item.
         /// </summary>
-        public string Brand { get; set; }
+        public string Brand { get; private set; }
 
         /// <summary>
-        /// Gets or sets the name or identifier of the model.
+        /// Gets the name or identifier of the model.
         /// </summary>
-        public string Model { get; set; }
+        public string Model { get; private set; }
 
         /// <summary>
-        /// Gets or sets the numeric license plate identifier for the vehicle.
+        /// Gets the numeric license plate identifier for the vehicle.
         /// </summary>
-        public string LicensePlate { get; set; }
+        public string LicensePlate { get; private set; }
 
         /// <summary>
-        /// Gets or sets the date when the item was manufactured.
+        /// Gets the date when the item was manufactured.
         /// </summary>
-        public DateTime ManufacturingDate { get; set; }
+        public DateTime ManufacturingDate { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the resource is currently available.
         /// </summary>
         public bool IsAvailable { get; set; }
+
+        /// <summary>
+        /// Marks the vehicle as rented.
+        /// </summary>
+        public void MarkAsRented()
+        {
+            IsAvailable = false;
+        }
+
+        /// <summary>
+        /// Marks the vehicle as available.
+        /// </summary>
+        public void MarkAsAvailable()
+        {
+            IsAvailable = true;
+        }
 
         /// <summary>
         /// Checks if the license plate matches the spanish format: 4 digits followed by 3 uppercase letters (e.g., 1234ABC).

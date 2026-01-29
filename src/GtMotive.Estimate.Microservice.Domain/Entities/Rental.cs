@@ -1,4 +1,5 @@
 ﻿using System;
+using GtMotive.Estimate.Microservice.Domain.Exceptions;
 
 namespace GtMotive.Estimate.Microservice.Domain.Entities
 {
@@ -31,24 +32,24 @@ namespace GtMotive.Estimate.Microservice.Domain.Entities
         }
 
         /// <summary>
-        /// Gets or sets the unique identifier for the entity.
+        /// Gets the unique identifier for the entity.
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
 
         /// <summary>
-        /// Gets or sets the unique identifier for the vehicle.
+        /// Gets the unique identifier for the vehicle.
         /// </summary>
-        public Guid VehicleId { get; set; }
+        public Guid VehicleId { get; private set; }
 
         /// <summary>
-        /// Gets or sets the unique identifier for the customer.
+        /// Gets the unique identifier for the customer.
         /// </summary>
-        public Guid CustomerId { get; set; }
+        public Guid CustomerId { get; private set; }
 
         /// <summary>
-        /// Gets or sets the start date for the associated event or period.
+        /// Gets the start date for the associated event or period.
         /// </summary>
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate { get; private set; }
 
         /// <summary>
         /// Gets or sets the end date for the associated period or event.
@@ -59,5 +60,25 @@ namespace GtMotive.Estimate.Microservice.Domain.Entities
         /// Gets or sets a value indicating whether the object is currently active.
         /// </summary>
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Finish the rental.
+        /// </summary>
+        /// <param name="endDate">The end date of the rental.</param>
+        public void Finish(DateTime endDate)
+        {
+            if (!IsActive)
+            {
+                throw new DomainException("The rental is already finished.");
+            }
+
+            if (endDate < StartDate)
+            {
+                throw new DomainException("The end date cannot be earlier than the start date.");
+            }
+
+            EndDate = endDate;
+            IsActive = false;
+        }
     }
 }
