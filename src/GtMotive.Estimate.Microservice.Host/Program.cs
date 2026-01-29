@@ -5,10 +5,13 @@ using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using GtMotive.Estimate.Microservice.Api;
+using GtMotive.Estimate.Microservice.Domain.Interfaces;
+using GtMotive.Estimate.Microservice.Domain.Repositories;
 using GtMotive.Estimate.Microservice.Host.Configuration;
 using GtMotive.Estimate.Microservice.Host.DependencyInjection;
 using GtMotive.Estimate.Microservice.Infrastructure;
 using GtMotive.Estimate.Microservice.Infrastructure.MongoDb.Settings;
+using GtMotive.Estimate.Microservice.Infrastructure.Repositories.InMemory;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
@@ -93,6 +96,11 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddSwagger(appSettings, builder.Configuration);
+
+// Dependency Injection for InMemory repositories.
+builder.Services.AddSingleton<IVehicleRepository, InMemoryVehicleRepository>();
+builder.Services.AddSingleton<IRentalRepository, InMemoryRentalRepository>();
+builder.Services.AddScoped<IUnitOfWork, InMemoryUnitOfWork>();
 
 var app = builder.Build();
 
