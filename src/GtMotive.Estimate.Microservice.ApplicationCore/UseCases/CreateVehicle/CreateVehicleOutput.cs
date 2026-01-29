@@ -11,7 +11,5 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.CreateVehicle
     /// <param name="LicensePlate">Vehicle license plate.</param>
     /// <param name="ManufacturingDate">Vehicle manufacturing date.</param>
     public record CreateVehicleOutput(Guid Id, string Brand, string Model, string LicensePlate, DateTime ManufacturingDate)
-        : IUseCaseOutput
-    {
-    }
+        : IUseCaseOutput;
 }

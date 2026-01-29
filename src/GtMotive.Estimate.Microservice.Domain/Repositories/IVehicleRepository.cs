@@ -21,7 +21,7 @@ namespace GtMotive.Estimate.Microservice.Domain.Repositories
         /// Get all available vehicles.
         /// </summary>
         /// <returns>A list of available vehicles.</returns>
-        Task<IEnumerable<Vehicle>> GetAvailableAsync();
+        Task<IEnumerable<Vehicle>> GetAvailablesAsync();
 
         /// <summary>
         /// Add a new vehicle to the repository.

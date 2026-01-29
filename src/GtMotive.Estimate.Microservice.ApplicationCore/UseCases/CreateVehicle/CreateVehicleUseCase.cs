@@ -27,7 +27,7 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.CreateVehicle
         /// Executes the use case.
         /// </summary>
         /// <param name="input">The input data.</param>
-        /// <returns>A task representing the operation.</returns>
+        /// <returns>A task representing the asynchronous operation.</returns>
         public async Task Execute(CreateVehicleInput input)
         {
             ArgumentNullException.ThrowIfNull(input);
