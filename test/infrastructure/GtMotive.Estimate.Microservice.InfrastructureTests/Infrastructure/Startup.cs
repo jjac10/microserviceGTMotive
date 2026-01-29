@@ -2,7 +2,10 @@
 using Acheve.AspNetCore.TestHost.Security;
 using Acheve.TestHost;
 using GtMotive.Estimate.Microservice.Api;
+using GtMotive.Estimate.Microservice.Domain.Interfaces;
+using GtMotive.Estimate.Microservice.Domain.Repositories;
 using GtMotive.Estimate.Microservice.Infrastructure;
+using GtMotive.Estimate.Microservice.Infrastructure.Repositories.InMemory;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace GtMotive.Estimate.Microservice.InfrastructureTests.Infrastructure
 {
-    internal sealed class Startup(IWebHostEnvironment environment, IConfiguration configuration)
+    public sealed class Startup(IWebHostEnvironment environment, IConfiguration configuration)
     {
         public IWebHostEnvironment Environment { get; } = environment;
 
@@ -40,9 +43,14 @@ namespace GtMotive.Estimate.Microservice.InfrastructureTests.Infrastructure
                 .AddTestServer();
 
             services.AddControllers(ApiConfiguration.ConfigureControllers)
-                .WithApiControllers();
+                .WithApiControllers()
+                .AddNewtonsoftJson();
 
             services.AddBaseInfrastructure(true);
+
+            services.AddSingleton<IVehicleRepository, InMemoryVehicleRepository>();
+
+            services.AddSingleton<IUnitOfWork, FakeUnitOfWork>();
         }
     }
 }
