@@ -12,12 +12,11 @@ namespace GtMotive.Estimate.Microservice.Domain.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="Vehicle"/> class.
         /// </summary>
-        /// <param name="id">The unique identifier for the vehicle.</param>
         /// <param name="brand">The manufacturer or brand name of the vehicle. Cannot be null or empty.</param>
         /// <param name="model">The model designation of the vehicle. Cannot be null or empty.</param>
         /// <param name="licensePlate">The license plate number assigned to the vehicle. Cannot be null or empty.</param>
         /// <param name="manufacturingDate">The date the vehicle was manufactured.</param>
-        public Vehicle(Guid id, string brand, string model, string licensePlate, DateTime manufacturingDate)
+        public Vehicle(string brand, string model, string licensePlate, DateTime manufacturingDate)
         {
             if (manufacturingDate < DateTime.UtcNow.AddYears(-5))
             {
@@ -29,7 +28,7 @@ namespace GtMotive.Estimate.Microservice.Domain.Entities
                 throw new InvalidLicensePlateException(licensePlate);
             }
 
-            Id = id;
+            Id = Guid.NewGuid();
             Brand = brand;
             Model = model;
             LicensePlate = licensePlate;

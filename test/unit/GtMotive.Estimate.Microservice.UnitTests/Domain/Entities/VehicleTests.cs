@@ -17,17 +17,15 @@ namespace GtMotive.Estimate.Microservice.UnitTests.Domain.Entities
         public void CreateVehicleWithValidDataShouldSucceed()
         {
             // Arrange
-            var id = Guid.NewGuid();
             var brand = "Toyota";
             var model = "Corolla";
             var licensePlate = "1234ABC";
             var manufacturingDate = DateTime.UtcNow.AddYears(-3);
 
             // Act
-            var vehicle = new Vehicle(id, brand, model, licensePlate, manufacturingDate);
+            var vehicle = new Vehicle(brand, model, licensePlate, manufacturingDate);
 
             // Assert
-            Assert.Equal(id, vehicle.Id);
             Assert.Equal(brand, vehicle.Brand);
             Assert.Equal(model, vehicle.Model);
             Assert.Equal(licensePlate, vehicle.LicensePlate);
@@ -42,7 +40,6 @@ namespace GtMotive.Estimate.Microservice.UnitTests.Domain.Entities
         public void CreateVehicleWithIncorrectLicensePlateShouldThrowDomainException()
         {
             // Arrange
-            var id = Guid.NewGuid();
             var brand = "Honda";
             var model = "Civic";
             var licensePlate = "12AB34"; // Invalid format
@@ -50,7 +47,7 @@ namespace GtMotive.Estimate.Microservice.UnitTests.Domain.Entities
 
             // Act & Assert
             var exception = Assert.Throws<InvalidLicensePlateException>(() =>
-                new Vehicle(id, brand, model, licensePlate, manufacturingDate));
+                new Vehicle(brand, model, licensePlate, manufacturingDate));
             Assert.Equal($"The license plate '{licensePlate}' is invalid. Expected format: 1234ABC", exception.Message);
         }
 
@@ -61,7 +58,6 @@ namespace GtMotive.Estimate.Microservice.UnitTests.Domain.Entities
         public void CreateVehicleOlderThan5YearsShouldThrowVehicleTooOldException()
         {
             // Arrange
-            var id = Guid.NewGuid();
             var brand = "Ford";
             var model = "Focus";
             var licensePlate = "5678DEF";
@@ -69,7 +65,7 @@ namespace GtMotive.Estimate.Microservice.UnitTests.Domain.Entities
 
             // Act & Assert
             var exception = Assert.Throws<VehicleTooOldException>(() =>
-                new Vehicle(id, brand, model, licensePlate, manufacturingDate));
+                new Vehicle(brand, model, licensePlate, manufacturingDate));
             Assert.Equal("The vehicle is over 5 years old and cannot be registered.", exception.Message);
         }
 
@@ -80,12 +76,7 @@ namespace GtMotive.Estimate.Microservice.UnitTests.Domain.Entities
         public void MarkAsRendedShouldSetIsAvailableToFalse()
         {
             // Arrange
-            var vehicle = new Vehicle(
-                Guid.NewGuid(),
-                "BMW",
-                "X3",
-                "9012GHI",
-                DateTime.UtcNow.AddYears(-1));
+            var vehicle = new Vehicle("BMW", "X3", "9012GHI", DateTime.UtcNow.AddYears(-1));
 
             // Act
             vehicle.MarkAsRented();
@@ -101,12 +92,7 @@ namespace GtMotive.Estimate.Microservice.UnitTests.Domain.Entities
         public void MarkAsAvailableShouldSetIsAvailableToTrue()
         {
             // Arrange
-            var vehicle = new Vehicle(
-                Guid.NewGuid(),
-                "BMW",
-                "X3",
-                "9012GHI",
-                DateTime.UtcNow.AddYears(-1));
+            var vehicle = new Vehicle("BMW", "X3", "9012GHI", DateTime.UtcNow.AddYears(-1));
 
             // Act
             vehicle.MarkAsRented();
