@@ -11,15 +11,18 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.CreateVehicle
     /// Use case for creating a new vehicle.
     /// </summary>
     /// <param name="vehicleRepository">The vehicle repository.</param>
+    /// <param name="unitOfWork">The unit of work for persisting changes.</param>
     /// <param name="outputPort">The output port.</param>
     /// <param name="logger">The app logger.</param>
     public class CreateVehicleUseCase(
         IVehicleRepository vehicleRepository,
+        IUnitOfWork unitOfWork,
         ICreateVehicleOutputPort outputPort,
         IAppLogger<CreateVehicleUseCase> logger)
         : IUseCase<CreateVehicleInput>
     {
         private readonly IVehicleRepository _vehicleRepository = vehicleRepository;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly ICreateVehicleOutputPort _outputPort = outputPort;
         private readonly IAppLogger<CreateVehicleUseCase> _logger = logger;
 
@@ -34,16 +37,16 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.CreateVehicle
 
             _logger.LogInformation($"Starting vehicle creation process for license plate: {input.LicensePlate}");
 
-            var exists = await _vehicleRepository.ExistsByLicensePlateAsync(input.LicensePlate);
-            if (exists)
-            {
-                _logger.LogWarning($"Vehicle with License plate {input.LicensePlate} already exists.");
-                _outputPort.LicensePlateAlreadyExists($"A vehicle with license plate {input.LicensePlate} already exists.");
-                return;
-            }
-
             try
             {
+                var exists = await _vehicleRepository.ExistsByLicensePlateAsync(input.LicensePlate);
+                if (exists)
+                {
+                    _logger.LogWarning($"Vehicle with License plate {input.LicensePlate} already exists.");
+                    _outputPort.LicensePlateAlreadyExists($"A vehicle with license plate {input.LicensePlate} already exists.");
+                    return;
+                }
+
                 var vehicle = new Vehicle(
                     input.Brand,
                     input.Model,
@@ -51,6 +54,8 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.UseCases.CreateVehicle
                     input.ManufacturingDate);
 
                 await _vehicleRepository.AddAsync(vehicle);
+
+                await _unitOfWork.Save();
 
                 _logger.LogInformation($"Vehicle with License plate {input.LicensePlate} created successfully with ID: {vehicle.Id}");
 

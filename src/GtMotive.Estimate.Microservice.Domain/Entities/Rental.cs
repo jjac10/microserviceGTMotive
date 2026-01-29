@@ -11,13 +11,12 @@ namespace GtMotive.Estimate.Microservice.Domain.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="Rental"/> class.
         /// </summary>
-        /// <param name="id">Rental unique identifier.</param>
         /// <param name="vehicleId">Vehicle identifier.</param>
         /// <param name="customerId">Customer identifier.</param>
         /// <param name="startDate">Rental start date.</param>
-        public Rental(Guid id, Guid vehicleId, Guid customerId, DateTime startDate)
+        public Rental(Guid vehicleId, Guid customerId, DateTime startDate)
         {
-            Id = id;
+            Id = Guid.NewGuid();
             VehicleId = vehicleId;
             CustomerId = customerId;
             StartDate = startDate;
