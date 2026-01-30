@@ -12,6 +12,7 @@ namespace GtMotive.Estimate.Microservice.InfrastructureTests.Api
     /// Integration tests for Create Vehicle API endpoint.
     /// </summary>
     /// <param name="fixture">The fixture that provides the test server and service configuration.</param>
+    [Collection(TestCollections.TestServer)]
     public class CreateVehicleApiTests(GenericInfrastructureTestServerFixture fixture) : InfrastructureTestBase(fixture)
     {
         [Fact]

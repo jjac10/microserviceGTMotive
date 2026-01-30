@@ -1,5 +1,8 @@
 ﻿using GtMotive.Estimate.Microservice.Infrastructure.MongoDb.Settings;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 
 namespace GtMotive.Estimate.Microservice.Infrastructure.MongoDb
@@ -10,7 +13,7 @@ namespace GtMotive.Estimate.Microservice.Infrastructure.MongoDb
         {
             MongoClient = new MongoClient(options.Value.ConnectionString);
 
-            // Add call to RegisterBsonClasses() method.
+            BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
         }
 
         public MongoClient MongoClient { get; }
