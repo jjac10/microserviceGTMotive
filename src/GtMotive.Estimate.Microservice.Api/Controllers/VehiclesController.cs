@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.Api.UseCases.CreateVehicle;
+using GtMotive.Estimate.Microservice.Api.UseCases.GetAllVehicles;
 using GtMotive.Estimate.Microservice.Api.UseCases.GetAvailableVehicles;
 using GtMotive.Estimate.Microservice.Api.UseCases.RentVehicle;
 using GtMotive.Estimate.Microservice.Api.UseCases.ReturnVehicle;
@@ -22,6 +23,13 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
     public class VehiclesController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllVehicles()
+        {
+            var presenter = await _mediator.Send(new GetAllVehiclesRequest());
+            return presenter.ActionResult;
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateVehicle([FromBody] CreateVehicleRequest request)

@@ -28,6 +28,12 @@ namespace GtMotive.Estimate.Microservice.Infrastructure.Repositories.InMemory
             return Task.FromResult(exists);
         }
 
+        public Task<IEnumerable<Vehicle>> GetAllAsync()
+        {
+            var vehicles = Vehicles.Values.ToList();
+            return Task.FromResult<IEnumerable<Vehicle>>(vehicles);
+        }
+
         public Task<IEnumerable<Vehicle>> GetAvailablesAsync()
         {
             var availables = Vehicles.Values.Where(x => x.IsAvailable);

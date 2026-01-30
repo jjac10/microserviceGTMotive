@@ -18,6 +18,12 @@ namespace GtMotive.Estimate.Microservice.Domain.Repositories
         Task<Vehicle> GetByIdAsync(Guid id);
 
         /// <summary>
+        /// Get all vehicles.
+        /// </summary>
+        /// <returns>A list of vehicles.</returns>
+        Task<IEnumerable<Vehicle>> GetAllAsync();
+
+        /// <summary>
         /// Get all available vehicles.
         /// </summary>
         /// <returns>A list of available vehicles.</returns>

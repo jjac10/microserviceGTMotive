@@ -1,8 +1,10 @@
 ﻿using GtMotive.Estimate.Microservice.Api.UseCases.CreateVehicle;
+using GtMotive.Estimate.Microservice.Api.UseCases.GetAllVehicles;
 using GtMotive.Estimate.Microservice.Api.UseCases.GetAvailableVehicles;
 using GtMotive.Estimate.Microservice.Api.UseCases.RentVehicle;
 using GtMotive.Estimate.Microservice.Api.UseCases.ReturnVehicle;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.CreateVehicle;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetAllVehicles;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.GetAvailableVehicles;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.RentVehicle;
 using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.ReturnVehicle;
@@ -25,6 +27,9 @@ namespace GtMotive.Estimate.Microservice.Api.DependencyInjection
 
             services.AddScoped<ReturnVehiclePresenter>();
             services.AddScoped<IReturnVehicleOutputPort>(sp => sp.GetRequiredService<ReturnVehiclePresenter>());
+
+            services.AddScoped<GetAllVehiclesPresenter>();
+            services.AddScoped<IGetAllVehiclesOutputPort>(sp => sp.GetRequiredService<GetAllVehiclesPresenter>());
 
             return services;
         }

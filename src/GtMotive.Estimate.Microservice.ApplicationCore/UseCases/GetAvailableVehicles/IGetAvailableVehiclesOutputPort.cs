@@ -3,7 +3,5 @@
     /// <summary>
     /// Output port for get available vehicles use case.
     /// </summary>
-    public interface IGetAvailableVehiclesOutputPort : IOutputPortStandard<GetAvailableVehiclesOutput>
-    {
-    }
+    public interface IGetAvailableVehiclesOutputPort : IOutputPortStandard<GetAvailableVehiclesOutput>;
 }

@@ -69,7 +69,7 @@ To run the application manually without Docker using the In-Memory database:
     ```
 3.  **Run test from src**: Open a terminal in the project root folder and execute:3
     ```bash
-    dotnet test --project src
+    dotnet test
     ```
 
 ### 2. Using Docker (Recommended)
