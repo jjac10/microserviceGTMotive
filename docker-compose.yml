@@ -1,0 +1,30 @@
+version: '3.8'
+
+name: gtmotive-project
+
+services:
+  api:
+    container_name: estimate-api
+    build:
+      context: .
+      dockerfile: src/GtMotive.Estimate.Microservice.Host/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - MongoDb__ConnectionString=mongodb://mongo:27017
+      - MongoDb__MongoDbDatabaseName=GtMotiveDB
+      - AppSettings__UseMongoDb=true
+    depends_on:
+      - mongo
+
+  mongo:
+    container_name: estimate-mongo
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
