@@ -345,3 +345,9 @@ azure-env*.ps1
 azure_env*.ps1
 
 .DS_Store
+
+# Angular
+.angular/
+dist/
+/src/GtMotive.Estimate.Microservice.UI/.editorconfig
+/src/GtMotive.Estimate.Microservice.UI/.vscode/
