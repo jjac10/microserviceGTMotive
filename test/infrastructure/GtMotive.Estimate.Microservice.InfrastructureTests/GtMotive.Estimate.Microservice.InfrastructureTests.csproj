@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="Acheve.TestHost" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.2" />
     </ItemGroup>
 
     <ItemGroup>

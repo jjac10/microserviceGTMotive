@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
+using System.Threading.Tasks;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
@@ -94,6 +95,18 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddSwagger(appSettings, builder.Configuration);
 
+var useMongoDb = builder.Configuration.GetSection("AppSettings").GetValue<bool>("UseMongoDb");
+
+if (useMongoDb)
+{
+    builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDb"));
+    builder.Services.AddMongoDbInfrastructure();
+}
+else
+{
+    builder.Services.AddInMemoryInfrastructure();
+}
+
 var app = builder.Build();
 
 // Logging configuration.
@@ -138,5 +151,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+app.MapGet("/", async context =>
+{
+    context.Response.Redirect("/swagger");
+    await Task.CompletedTask;
+});
 
 await app.RunAsync();

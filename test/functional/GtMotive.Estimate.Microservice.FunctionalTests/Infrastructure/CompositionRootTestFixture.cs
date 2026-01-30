@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.Api;
+using GtMotive.Estimate.Microservice.Domain.Repositories;
 using GtMotive.Estimate.Microservice.Infrastructure;
+using GtMotive.Estimate.Microservice.Infrastructure.Repositories.InMemory;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +14,7 @@ using Xunit;
 
 namespace GtMotive.Estimate.Microservice.FunctionalTests.Infrastructure
 {
-    internal sealed class CompositionRootTestFixture : IDisposable, IAsyncLifetime
+    public sealed class CompositionRootTestFixture : IDisposable, IAsyncLifetime
     {
         private readonly ServiceProvider _serviceProvider;
 
@@ -94,6 +96,9 @@ namespace GtMotive.Estimate.Microservice.FunctionalTests.Infrastructure
             services.AddApiDependencies();
             services.AddLogging();
             services.AddBaseInfrastructure(true);
+
+            services.AddSingleton<IVehicleRepository, InMemoryVehicleRepository>();
+            services.AddSingleton<IRentalRepository, InMemoryRentalRepository>();
         }
     }
 }
