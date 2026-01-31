@@ -69,7 +69,7 @@ namespace GtMotive.Estimate.Microservice.Domain.Entities
         public DateTime ManufacturingDate { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the resource is currently available.
+        /// Gets or sets a value indicating whether the vehicle is currently available.
         /// </summary>
         public bool IsAvailable { get; set; }
 

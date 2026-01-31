@@ -1,0 +1,114 @@
+<div class="container">
+    <header class="header">
+        <h1>All Fleet Vehicles</h1>
+        <button (click)="toggleAddMode()" class="btn btn-primary" [class.btn-cancel]="isAdding">
+            <span *ngIf="!isAdding">+ Add Vehicle</span>
+            <span *ngIf="isAdding">Cancel</span>
+        </button>
+    </header>
+
+    <!-- Floating Toasts -->
+    <div class="toast-container">
+        <div class="toast toast-error" *ngIf="errorMessage" (click)="closeMessage()">
+            {{ errorMessage }}
+            <button class="close-btn">&times;</button>
+        </div>
+        <div class="toast toast-success" *ngIf="successMessage" (click)="closeMessage()">
+            {{ successMessage }}
+            <button class="close-btn">&times;</button>
+        </div>
+    </div>
+
+    <!-- Inline Add Form -->
+    <div class="add-vehicle-section" *ngIf="isAdding">
+        <form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()" class="inline-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Brand</label>
+                    <input type="text" formControlName="brand" placeholder="e.g. Toyota" class="form-control"
+                        [class.invalid]="vehicleForm.get('brand')?.invalid && vehicleForm.get('brand')?.touched">
+                </div>
+                <div class="form-group">
+                    <label>Model</label>
+                    <input type="text" formControlName="model" placeholder="e.g. Corolla" class="form-control"
+                        [class.invalid]="vehicleForm.get('model')?.invalid && vehicleForm.get('model')?.touched">
+                </div>
+                <div class="form-group">
+                    <label>License Plate</label>
+                    <input type="text" formControlName="licensePlate" placeholder="1234ABC" class="form-control"
+                        [class.invalid]="vehicleForm.get('licensePlate')?.invalid && vehicleForm.get('licensePlate')?.touched">
+                    <div class="error-tooltip" *ngIf="vehicleForm.get('licensePlate')?.errors?.['pattern']">Format:
+                        1234ABC</div>
+                </div>
+                <div class="form-group">
+                    <label>Manufacturing Date</label>
+                    <input type="date" formControlName="manufacturingDate" class="form-control"
+                        [class.invalid]="vehicleForm.get('manufacturingDate')?.invalid && vehicleForm.get('manufacturingDate')?.touched">
+                    <div class="error-tooltip" *ngIf="vehicleForm.get('manufacturingDate')?.errors?.['futureDate']">Date
+                        cannot be future</div>
+                    <div class="error-tooltip" *ngIf="vehicleForm.get('manufacturingDate')?.errors?.['tooOld']">Max 5
+                        years old</div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-save" [disabled]="vehicleForm.invalid || submitting">
+                        {{ submitting ? 'Saving...' : 'Save Vehicle' }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Table Layout -->
+    <div class="table-container" *ngIf="!loading; else loadingTpl">
+        <table class="vehicle-table" *ngIf="vehicles.length > 0; else emptyState">
+            <thead>
+                <tr>
+                    <th (click)="onSort('model')" class="sortable">
+                        Vehicle Model
+                        <span *ngIf="sortColumn === 'model'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+                    </th>
+                    <th (click)="onSort('licensePlate')" class="sortable">
+                        License Plate
+                        <span *ngIf="sortColumn === 'licensePlate'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+                    </th>
+                    <th (click)="onSort('manufacturingDate')" class="sortable">
+                        Manufacturing Date
+                        <span *ngIf="sortColumn === 'manufacturingDate'">{{ sortDirection === 'asc' ? '↑' : '↓'
+                            }}</span>
+                    </th>
+                    <th class="col-actions-header">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let vehicle of vehicles" [class.disabled-row]="!isAvailable(vehicle)">
+                    <td class="col-model">
+                        <span class="brand">{{ vehicle.brand }}</span>
+                        <span class="model">{{ vehicle.model }}</span>
+                    </td>
+                    <td class="col-plate">{{ vehicle.licensePlate }}</td>
+                    <td class="col-date">{{ vehicle.manufacturingDate | date:'dd/MM/yyyy' }}</td>
+                    <td class="col-actions">
+                        <ng-container *ngIf="isAvailable(vehicle)">
+                            <button class="btn btn-rent"
+                                (click)="rentVehicle(vehicle); $event.stopPropagation()">Rent</button>
+                        </ng-container>
+                        <ng-container *ngIf="!isAvailable(vehicle)">
+                            <button class="btn btn-return"
+                                (click)="returnVehicle(vehicle); $event.stopPropagation()">Return</button>
+                        </ng-container>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-template #emptyState>
+        <div class="empty-state">
+            No vehicles found. Click "Add Vehicle" to create one.
+        </div>
+    </ng-template>
+
+    <ng-template #loadingTpl>
+        <div class="loading">Loading vehicles...</div>
+    </ng-template>
+</div>

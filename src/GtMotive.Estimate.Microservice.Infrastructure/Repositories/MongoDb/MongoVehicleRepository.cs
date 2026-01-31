@@ -28,6 +28,11 @@ namespace GtMotive.Estimate.Microservice.Infrastructure.Repositories.MongoDb
             return await _collection.Find(v => v.Id == id).FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<Vehicle>> GetAllAsync()
+        {
+            return await _collection.Find(_ => true).ToListAsync();
+        }
+
         public async Task<IEnumerable<Vehicle>> GetAvailablesAsync()
         {
             return await _collection.Find(v => v.IsAvailable).ToListAsync();
