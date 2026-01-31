@@ -78,3 +78,10 @@ This will spin up the API and a MongoDB container automatically.
 ```bash
 # From the project root folder
 docker-compose up --build -d
+
+## Additional Features
+### Fleet Listing Endpoint
+A new endpoint has been implemented to retrieve the complete list of vehicles in the fleet, enhancing visibility and management capabilities.
+
+### Modern User Interface
+An **Angular-based UI** has been developed to provide a user-friendly interface for the microservice. This component was generated with AI assistance and is fully integrated into the existing Docker deployment workflow.
